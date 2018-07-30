@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 
 import com.alivc.player.VcPlayerLog;
 import com.aliyun.vodplayer.media.AliyunVidSts;
-import com.aliyun.vodplayer.media.BuildConfig;
 import com.aliyun.vodplayer.utils.HttpClientUtil;
 
 import org.json.JSONObject;
@@ -19,40 +18,41 @@ public class VidStsUtil {
 
     public static AliyunVidSts getVidSts(String videoId) {
 
-        if(!BuildConfig.DEBUG) {
-            //Do not get STS in debug mode, developers fill in their own STS
-            return null;
-        }else{
-                try {
-                    String response = HttpClientUtil.doGet("https://demo-vod.cn-shanghai.aliyuncs.com/voddemo/CreateSecurityToken?BusinessType=vodai&TerminalType=pc&DeviceModel=iPhone9,2&UUID=59ECA-4193-4695-94DD-7E1247288&AppVersion=1.0.0&VideoId=" + videoId);
+//        if(!BuildConfig.DEBUG) {
+//            //Do not get STS in debug mode, developers fill in their own STS
+//            return null;
+//        }else{
+        try {
 
-                    JSONObject jsonObject = new JSONObject(response);
+            String response = HttpClientUtil.doGet("https://demo-vod.cn-shanghai.aliyuncs.com/voddemo/CreateSecurityToken?BusinessType=vodai&TerminalType=pc&DeviceModel=iPhone9,2&UUID=59ECA-4193-4695-94DD-7E1247288&AppVersion=1.0.0&VideoId=" + videoId);
 
-                    JSONObject securityTokenInfo = jsonObject.getJSONObject("SecurityTokenInfo");
-                    if (securityTokenInfo == null) {
+            JSONObject jsonObject = new JSONObject(response);
 
-                        VcPlayerLog.e(TAG, "SecurityTokenInfo == null ");
-                        return null;
-                    }
+            JSONObject securityTokenInfo = jsonObject.getJSONObject("SecurityTokenInfo");
+            if (securityTokenInfo == null) {
 
-                    String accessKeyId = securityTokenInfo.getString("AccessKeyId");
-                    String accessKeySecret = securityTokenInfo.getString("AccessKeySecret");
-                    String securityToken = securityTokenInfo.getString("SecurityToken");
-                    VcPlayerLog.e(TAG, "accessKeyId = " + accessKeyId + " , accessKeySecret = " + accessKeySecret +
-                            " , securityToken = " + securityToken);
-
-                    AliyunVidSts vidSts = new AliyunVidSts();
-                    vidSts.setVid(videoId);
-                    vidSts.setAcId(accessKeyId);
-                    vidSts.setAkSceret(accessKeySecret);
-                    vidSts.setSecurityToken(securityToken);
-                    return vidSts;
-
-                } catch (Exception e) {
-                    VcPlayerLog.e(TAG, "e = " + e.getMessage());
-                    return null;
-                }
+                VcPlayerLog.e(TAG, "SecurityTokenInfo == null ");
+                return null;
             }
+
+            String accessKeyId = securityTokenInfo.getString("AccessKeyId");
+            String accessKeySecret = securityTokenInfo.getString("AccessKeySecret");
+            String securityToken = securityTokenInfo.getString("SecurityToken");
+            VcPlayerLog.e(TAG, "accessKeyId = " + accessKeyId + " , accessKeySecret = " + accessKeySecret +
+                    " , securityToken = " + securityToken);
+
+            AliyunVidSts vidSts = new AliyunVidSts();
+            vidSts.setVid(videoId);
+            vidSts.setAcId(accessKeyId);
+            vidSts.setAkSceret(accessKeySecret);
+            vidSts.setSecurityToken(securityToken);
+            return vidSts;
+
+        } catch (Exception e) {
+            VcPlayerLog.e(TAG, "e = " + e.getMessage());
+            return null;
+        }
+//            }
 
 
     }
@@ -76,7 +76,7 @@ public class VidStsUtil {
                 if (s == null) {
                     onStsResultListener.onFail();
                 } else {
-                    onStsResultListener.onSuccess(s.getVid(),s.getAcId(), s.getAkSceret(), s.getSecurityToken());
+                    onStsResultListener.onSuccess(s.getVid(), s.getAcId(), s.getAkSceret(), s.getSecurityToken());
                 }
             }
         };

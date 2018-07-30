@@ -1,5 +1,6 @@
 package vodplayerview.view.more;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.shx.dancer.R;
-
-import vodplayerview.activity.AliyunPlayerSkinActivity;
 
 
 public class ShowMoreView extends LinearLayout implements View.OnClickListener,RadioGroup.OnCheckedChangeListener {
@@ -30,7 +29,7 @@ public class ShowMoreView extends LinearLayout implements View.OnClickListener,R
     private OnScreenCastButtonClickListener mOnScreenCastButtonClickListener;
     private OnBarrageButtonClickListener mOnBarrageButtonClickListener;
 
-    public ShowMoreView(AliyunPlayerSkinActivity context, AliyunShowMoreValue moreValue) {
+    public ShowMoreView(Activity context, AliyunShowMoreValue moreValue) {
         super(context);
         this.context = context;
         this.moreValue = moreValue;
