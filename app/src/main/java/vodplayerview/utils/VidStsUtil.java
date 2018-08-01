@@ -34,7 +34,6 @@ public class VidStsUtil {
                 VcPlayerLog.e(TAG, "SecurityTokenInfo == null ");
                 return null;
             }
-
             String accessKeyId = securityTokenInfo.getString("AccessKeyId");
             String accessKeySecret = securityTokenInfo.getString("AccessKeySecret");
             String securityToken = securityTokenInfo.getString("SecurityToken");

@@ -4,7 +4,10 @@ package vodplayerview.view.more;
  * 倍速值
  */
 public enum SpeedValue {
-
+    /**
+     * 0.5倍速
+     */
+    Half,
     /**
      * 正常倍速
      */

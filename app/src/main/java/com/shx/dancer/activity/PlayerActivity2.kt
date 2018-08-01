@@ -1,17 +1,24 @@
 package com.shx.dancer.activity
 
+import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
+import com.alivc.player.VcPlayerLog
 import com.aliyun.vodplayer.media.AliyunLocalSource
 import com.aliyun.vodplayer.media.AliyunVidSts
 import com.aliyun.vodplayer.media.IAliyunVodPlayer
 import com.shx.dancer.R
 import com.shx.dancer.base.BaseActivity
 import vodplayerview.constants.PlayParameter
+import vodplayerview.utils.ScreenUtils
 import vodplayerview.utils.VidStsUtil
 import vodplayerview.view.choice.AlivcShowMoreDialog
 import vodplayerview.view.control.ControlView
@@ -34,8 +41,25 @@ class PlayerActivity2 : BaseActivity(), View.OnClickListener {
     private var inRequest: Boolean = false
     private var mAliyunVodPlayerView: AliyunVodPlayerView? = null
     private var showMoreDialog: AlivcShowMoreDialog? = null
+    private fun isStrangePhone(): Boolean {
+        val strangePhone = ("mx5".equals(Build.DEVICE, ignoreCase = true)
+                || "Redmi Note2".equals(Build.DEVICE, ignoreCase = true)
+                || "Z00A_1".equals(Build.DEVICE, ignoreCase = true)
+                || "hwH60-L02".equals(Build.DEVICE, ignoreCase = true)
+                || "hermes".equals(Build.DEVICE, ignoreCase = true)
+                || "V4".equals(Build.DEVICE, ignoreCase = true) && "Meitu".equals(Build.MANUFACTURER, ignoreCase = true)
+                || "m1metal".equals(Build.DEVICE, ignoreCase = true) && "Meizu".equals(Build.MANUFACTURER, ignoreCase = true))
+
+        VcPlayerLog.e("lfj1115 ", " Build.Device = " + Build.DEVICE + " , isStrange = " + strangePhone)
+        return strangePhone
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (isStrangePhone()) {
+            //            setTheme(R.style.ActTheme);
+        } else {
+            setTheme(R.style.NoActionTheme)
+        }
         setContentView(R.layout.activity_player2)
         requestVidSts()
         initAliyunPlayerView()
@@ -49,7 +73,7 @@ class PlayerActivity2 : BaseActivity(), View.OnClickListener {
             return
         }
         inRequest = true
-        PlayParameter.PLAY_PARAM_VID = "ccdbbb3f17834aeb80c94eb4887b3ceb"
+        PlayParameter.PLAY_PARAM_VID = "6e783360c811449d8692b2117acc9212"
         VidStsUtil.getVidSts(PlayParameter.PLAY_PARAM_VID, MyStsListener(this))
     }
 
@@ -443,10 +467,10 @@ class PlayerActivity2 : BaseActivity(), View.OnClickListener {
 
         showMoreView.setOnSpeedCheckedChangedListener { group, checkedId ->
             // 点击速度切换
-            if (checkedId == R.id.rb_speed_normal) {
+            if (checkedId == R.id.rb_speed_half) {
+                mAliyunVodPlayerView!!.changeSpeed(SpeedValue.Half)
+            } else if (checkedId == R.id.rb_speed_normal) {
                 mAliyunVodPlayerView!!.changeSpeed(SpeedValue.One)
-            } else if (checkedId == R.id.rb_speed_onequartern) {
-                mAliyunVodPlayerView!!.changeSpeed(SpeedValue.OneQuartern)
             } else if (checkedId == R.id.rb_speed_onehalf) {
                 mAliyunVodPlayerView!!.changeSpeed(SpeedValue.OneHalf)
             } else if (checkedId == R.id.rb_speed_twice) {
@@ -486,4 +510,59 @@ class PlayerActivity2 : BaseActivity(), View.OnClickListener {
         })
 
     }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updatePlayerViewMode()
+    }
+
+    private fun updatePlayerViewMode() {
+        if (mAliyunVodPlayerView != null) {
+            val orientation = resources.configuration.orientation
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                //转为竖屏了。
+                //显示状态栏
+                //                if (!isStrangePhone()) {
+                //                    getSupportActionBar().show();
+                //                }
+
+                this.window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                mAliyunVodPlayerView!!.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE)
+
+                //设置view的布局，宽高之类
+                val aliVcVideoViewLayoutParams = mAliyunVodPlayerView!!
+                        .getLayoutParams() as LinearLayout.LayoutParams
+                aliVcVideoViewLayoutParams.height = (ScreenUtils.getWidth(this) * 9.0f / 16).toInt()
+                aliVcVideoViewLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                //                if (!isStrangePhone()) {
+                //                    aliVcVideoViewLayoutParams.topMargin = getSupportActionBar().getHeight();
+                //                }
+
+            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                //转到横屏了。
+                //隐藏状态栏
+                if (!isStrangePhone()) {
+                    this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                    mAliyunVodPlayerView!!.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+                }
+
+                //设置view的布局，宽高
+                val aliVcVideoViewLayoutParams = mAliyunVodPlayerView!!
+                        .getLayoutParams() as LinearLayout.LayoutParams
+                aliVcVideoViewLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                aliVcVideoViewLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                //                if (!isStrangePhone()) {
+                //                    aliVcVideoViewLayoutParams.topMargin = 0;
+                //                }
+            }
+
+        }
+    }
+
 }

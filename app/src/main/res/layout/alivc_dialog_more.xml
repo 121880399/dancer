@@ -25,6 +25,7 @@
                 android:layout_width="0dp"
                 android:drawableTop="@drawable/alivc_download_downloading"
                 android:text="下载"
+                android:visibility="gone"
                 android:gravity="center"
                 android:textColor="@color/alivc_white"
                 android:layout_height="match_parent"
@@ -96,6 +97,7 @@
             android:layout_marginBottom="32dp"
             android:layout_height="wrap_content"
             >
+
             <RadioButton
                 android:id="@+id/rb_speed_normal"
                 android:layout_width="0dp"
@@ -106,7 +108,16 @@
                 android:gravity="center"
                 android:textColor="@color/alivc_speed_text_color_blue"
                 />
-
+            <RadioButton
+                android:id="@+id/rb_speed_half"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:text="0.5X"
+                android:gravity="center"
+                android:textColor="@color/alivc_speed_text_color_blue"
+                />
             <RadioButton
                 android:id="@+id/rb_speed_onequartern"
                 android:layout_width="0dp"
@@ -115,6 +126,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="1.25X"
+                android:visibility="gone"
                 android:textColor="@color/alivc_speed_text_color_blue"
                 />
             <RadioButton

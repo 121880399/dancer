@@ -216,10 +216,13 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
 
     /**
      * 切换播放速度
+     *
      * @param speedValue
      */
     public void changeSpeed(SpeedValue speedValue) {
-        if (speedValue == SpeedValue.One) {
+        if (speedValue == SpeedValue.Half) {
+            currentSpeed = 0.5f;
+        } else if (speedValue == SpeedValue.One) {
             currentSpeed = 1.0f;
         } else if (speedValue == SpeedValue.OneQuartern) {
             currentSpeed = 1.25f;
@@ -360,9 +363,9 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         }
 
         @Override
-        public void onWifiTo4G(){
+        public void onWifiTo4G() {
             AliyunVodPlayerView aliyunVodPlayerView = viewWeakReference.get();
-            if(aliyunVodPlayerView != null){
+            if (aliyunVodPlayerView != null) {
                 aliyunVodPlayerView.onWifiTo4G();
             }
         }
@@ -370,7 +373,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         @Override
         public void on4GToWifi() {
             AliyunVodPlayerView aliyunVodPlayerView = viewWeakReference.get();
-            if(aliyunVodPlayerView != null){
+            if (aliyunVodPlayerView != null) {
                 aliyunVodPlayerView.on4GToWifi();
             }
         }
@@ -378,7 +381,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         @Override
         public void onNetDisconnected() {
             AliyunVodPlayerView aliyunVodPlayerView = viewWeakReference.get();
-            if(aliyunVodPlayerView != null){
+            if (aliyunVodPlayerView != null) {
                 aliyunVodPlayerView.onNetDisconnected();
             }
         }
@@ -701,7 +704,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
                 //    .build().show();
 
                 // 如果当前播放视频时url类型, 不允许下载
-                if ("localSource".equals(PlayParameter.PLAY_PARAM_TYPE)){
+                if ("localSource".equals(PlayParameter.PLAY_PARAM_TYPE)) {
                     Toast.makeText(getContext(), getResources().getString(R.string.slivc_not_support_url), Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -744,7 +747,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
                 }
 
                 changeScreenMode(targetMode);
-                if(mCurrentScreenMode == AliyunScreenMode.Full) {
+                if (mCurrentScreenMode == AliyunScreenMode.Full) {
                     mControlView.showMoreButton();
                 } else if (mCurrentScreenMode == AliyunScreenMode.Small) {
                     mControlView.hideMoreButton();
@@ -1117,7 +1120,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
                 //关闭定时器
                 stopProgressUpdateTimer();
 
-                String scheme=null;
+                String scheme = null;
                 if ("localSource".equals(PlayParameter.PLAY_PARAM_TYPE)) {
                     Uri parse = Uri.parse(PlayParameter.PLAY_PARAM_URL);
                     scheme = parse.getScheme();
@@ -1251,7 +1254,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         mAliyunVodPlayer.setOnUrlTimeExpiredListener(new IAliyunVodPlayer.OnUrlTimeExpiredListener() {
             @Override
             public void onUrlTimeExpired(String vid, String quality) {
-                if (mOutUrlTimeExpiredListener!=null){
+                if (mOutUrlTimeExpiredListener != null) {
                     mOutUrlTimeExpiredListener.onUrlTimeExpired(vid, quality);
                 }
             }
@@ -1379,7 +1382,8 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         }
     }
 
-    /**addSubView
+    /**
+     * addSubView
      * 添加子view到布局中
      *
      * @param view 子view
@@ -1538,6 +1542,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
 
     /**
      * 设置鉴权过期监听，在鉴权过期前一分钟回调
+     *
      * @param listener
      */
     public void setOnUrlTimeExpiredListener(IAliyunVodPlayer.OnUrlTimeExpiredListener listener) {
@@ -1779,7 +1784,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
     public void setCoverUri(String uri) {
         if (mCoverView != null && !TextUtils.isEmpty(uri)) {
             (new ImageLoader(mCoverView)).loadAsync(uri);
-            mCoverView.setVisibility(isPlaying()?GONE:VISIBLE);
+            mCoverView.setVisibility(isPlaying() ? GONE : VISIBLE);
         }
     }
 
@@ -1791,7 +1796,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
     public void setCoverResource(int resId) {
         if (mCoverView != null) {
             mCoverView.setImageResource(resId);
-            mCoverView.setVisibility(isPlaying()?GONE:VISIBLE);
+            mCoverView.setVisibility(isPlaying() ? GONE : VISIBLE);
         }
     }
 
@@ -2281,10 +2286,11 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
 
     /**
      * 设置播放器view点击事件监听，目前只对外暴露下载按钮和投屏按钮
+     *
      * @param mOnPlayerViewClickListener
      */
     public void setmOnPlayerViewClickListener(
-        OnPlayerViewClickListener mOnPlayerViewClickListener) {
+            OnPlayerViewClickListener mOnPlayerViewClickListener) {
         this.mOnPlayerViewClickListener = mOnPlayerViewClickListener;
     }
 
@@ -2294,7 +2300,8 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
     public interface OnOrientationChangeListener {
         /**
          * 屏幕方向改变
-         * @param from 从横屏切换为竖屏, 从竖屏切换为横屏
+         *
+         * @param from        从横屏切换为竖屏, 从竖屏切换为横屏
          * @param currentMode 当前屏幕类型
          */
         void orientationChange(boolean from, AliyunScreenMode currentMode);
@@ -2303,7 +2310,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
     private OnOrientationChangeListener orientationChangeListener;
 
     public void setOrientationChangeListener(
-        OnOrientationChangeListener listener) {
+            OnOrientationChangeListener listener) {
         this.orientationChangeListener = listener;
     }
 
@@ -2311,7 +2318,8 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
      * 断网/连网监听
      */
     private class MyNetConnectedListener implements NetWatchdog.NetConnectedListener {
-        public MyNetConnectedListener( AliyunVodPlayerView aliyunVodPlayerView) {}
+        public MyNetConnectedListener(AliyunVodPlayerView aliyunVodPlayerView) {
+        }
 
         @Override
         public void onReNetConnected(boolean isReconnect) {
@@ -2328,9 +2336,10 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
         }
     }
 
-    public void setNetConnectedListener (NetConnectedListener listener) {
+    public void setNetConnectedListener(NetConnectedListener listener) {
         this.mNetConnectedListener = listener;
     }
+
     /**
      * 判断是否有网络的监听
      */
@@ -2354,7 +2363,7 @@ public class AliyunVodPlayerView extends RelativeLayout implements ITheme {
     }
 
     public void setOnShowMoreClickListener(
-        ControlView.OnShowMoreClickListener listener) {
+            ControlView.OnShowMoreClickListener listener) {
         this.mOutOnShowMoreClickListener = listener;
     }
 }

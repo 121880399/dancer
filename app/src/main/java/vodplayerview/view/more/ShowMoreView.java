@@ -62,10 +62,13 @@ public class ShowMoreView extends LinearLayout implements View.OnClickListener,R
 
         int currentRbIndex = 0;
         float curentSpeed = moreValue.getSpeed();
+        if(curentSpeed==0.5f){
+            currentRbIndex=0;
+        }
         if (curentSpeed == 1.0f) {
-            currentRbIndex = 0;
-        } else if (curentSpeed == 1.25f) {
             currentRbIndex = 1;
+//        } else if (curentSpeed == 1.25f) {
+//            currentRbIndex = 2;
         } else if (curentSpeed == 1.5f) {
             currentRbIndex = 2;
         } else if (curentSpeed == 2.0f) {
