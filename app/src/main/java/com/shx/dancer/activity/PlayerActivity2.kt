@@ -565,4 +565,37 @@ class PlayerActivity2 : BaseActivity(), View.OnClickListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        updatePlayerViewMode()
+        if (mAliyunVodPlayerView != null) {
+            mAliyunVodPlayerView!!.onResume()
+        }
+    }
+    override fun onDestroy() {
+        if (mAliyunVodPlayerView != null) {
+            mAliyunVodPlayerView!!.onDestroy()
+            mAliyunVodPlayerView = null
+        }
+
+//        if (playerHandler != null) {
+//            playerHandler.removeMessages(DOWNLOAD_ERROR)
+//            playerHandler = null
+//        }
+        super.onDestroy()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        if (mAliyunVodPlayerView != null) {
+            mAliyunVodPlayerView!!.onStop()
+        }
+
+//        if (downloadManager != null && downloadDataProvider != null) {
+//            downloadManager.stopDownloadMedias(downloadDataProvider.getAllDownloadMediaInfo())
+//        }
+
+    }
 }
